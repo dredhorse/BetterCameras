@@ -3,7 +3,8 @@ using UnityEngine;
 using System;
 using System.Collections;
 
-namespace BetterCameras
+namespace BetterCameras.BetterPerspective
+
 {
 	public class BetterPerspectiveCamera : CameraController
 	{
@@ -65,6 +66,7 @@ namespace BetterCameras
 		private bool _lastDebugCamera;
 		private BetterPerspectiveCameraKeys KeysScript;
 		private BetterPerspectiveCameraMouse MouseScript;
+		private BetterCamerasSettings CameraSettings;
 		public Camera camera;
 
 		public Rect windowRect = new Rect(5, 70, 250, 400);
@@ -113,6 +115,7 @@ namespace BetterCameras
 
 			KeysScript = GetComponent<BetterPerspectiveCameraKeys>();
 			MouseScript = GetComponent<BetterPerspectiveCameraMouse>();
+			CameraSettings = GetComponent<BetterCamerasSettings> ();
 			camera = GetComponent<Camera>();
 
 			StartCoroutine(Wait(2F));
@@ -128,7 +131,6 @@ namespace BetterCameras
 				KeysScript.Reset();
 				MouseScript.Reset();
 				ShowSettings = false;
-				Load();
 			}
 
 			if (GetComponent<Rigidbody>())
@@ -154,14 +156,7 @@ namespace BetterCameras
 		protected void Update()
 		{
 
-			if(Input.GetKeyUp(KeyCode.P))
-			{
-				ShowSettings = !ShowSettings;
-			}
-			if (ShowSettings && Input.GetKey(KeyCode.Escape))
-			{
-				ShowSettings = false;
-			}
+
 
 			if (Input.GetMouseButton(2) || Input.GetKey(KeyCode.LeftControl))
 			{
@@ -343,10 +338,10 @@ namespace BetterCameras
 
 		void OnGUI()
 		{
-			if (ShowSettings)
+			/**if (ShowSettings)
 			{
 				windowRect = GUI.Window(0, windowRect, DoMyWindow, "Camera Settings");
-			}
+			}**/
 		}
 
 		void DoMyWindow(int windowID)
@@ -409,7 +404,6 @@ namespace BetterCameras
 		}
 		void OnDisable()
 		{
-			Save();
 		}
 		void Save()
 		{

@@ -1,20 +1,90 @@
 ﻿using UnityEngine;
+using BetterCameras.BetterPerspective;
+using System;
 
 namespace BetterCameras
 {
-    public class Main : IMod
+	public class Main : IMod, IModSettings
     {
+		public string Name { get { return "BetterCameras"; } }
+		public string Description { get { return "Cameras Galore"; } }
+		public string Identifier { get; set; }
+
+		public Main BetterCamerasMain;
+
+		public GameObject _go;
+
+		public static BetterCamerasSettings Settings = null;
+		public bool PerspectiveCameraRunning = false;
+		public bool GuestCameraRunning = false;
+		public bool RideCameraRunning = false;
+		public bool WalkCameraRunning = false;
+
+		public Main()
+		{
+			BetterCamerasMain = this;
+		}
+
 		public void onEnabled()
 		{
+			_go = new GameObject ();
+			_go.AddComponent<BetterCamerasSettings> ();
+			if (Settings == null)
+			{
+				Settings = _go.GetComponent<BetterCamerasSettings>();
+			}
+			Settings.onEnable ();
+			if (Settings.PerspectiveCameraEnabled && !PerspectiveCameraRunning)
+			{
+				enableBetterPerspectiveCamera();
+			}
+				
 
+		}
+
+		public void onDisabled()
+		{
+			Settings.Save();
+			if (PerspectiveCameraRunning)
+			{
+				disableBetterPerspectiveCamera();
+			}
+			UnityEngine.Object.Destroy (_go);
+		}
+
+
+		public void onDrawSettingsUI()
+		{
+			Settings.onDrawSettingsUI ();
+
+		}
+
+		public void onSettingsOpened()
+		{
+			Settings.onSettingsOpened ();
+		}
+
+		public void onSettingsClosed()
+		{
+			Settings.onSettingsClosed ();
+			if (Settings.PerspectiveCameraEnabled && !PerspectiveCameraRunning)
+			{
+				enableBetterPerspectiveCamera ();
+			}
+			if (!Settings.PerspectiveCameraEnabled && PerspectiveCameraRunning)
+			{
+				disableBetterPerspectiveCamera ();
+			}
+
+		}
+
+		#region BetterPerspectiveCamera
+		private void enableBetterPerspectiveCamera()
+		{
 			GameObject go = new GameObject();
 			Camera cam2 = go.AddComponent<Camera>();
 
 			Camera cam = Camera.main;
-
-			/**
-            * Ugliest code of all time, but hey, it works!
-            */
 			cam.aspect = cam2.aspect;
 			cam.backgroundColor = cam2.backgroundColor;
 			cam.clearFlags = cam2.clearFlags;
@@ -41,25 +111,26 @@ namespace BetterCameras
 			cam.useOcclusionCulling = cam2.useOcclusionCulling;
 
 
-			Object.DestroyImmediate(cam.gameObject.GetComponent<CameraController>());
+			UnityEngine.Object.DestroyImmediate(cam.gameObject.GetComponent<CameraController>());
+
 			Camera.main.gameObject.AddComponent<BetterPerspectiveCamera>();
 			Camera.main.gameObject.AddComponent<BetterPerspectiveCameraKeys>();
 			Camera.main.gameObject.AddComponent<BetterPerspectiveCameraMouse>();
 			Camera.main.gameObject.AddComponent<AudioListener>();
-			Object.Destroy(go);
+			UnityEngine.Object.Destroy(go);
 
+			PerspectiveCameraRunning = true;
 		}
 
-		public void onDisabled()
+		private void disableBetterPerspectiveCamera()
 		{
-			Object.DestroyImmediate(Camera.main.gameObject.GetComponent<BetterPerspectiveCamera>());
-			Object.DestroyImmediate(Camera.main.gameObject.GetComponent<BetterPerspectiveCameraKeys>());
-			Object.DestroyImmediate(Camera.main.gameObject.GetComponent<BetterPerspectiveCameraMouse>());
+			UnityEngine.Object.DestroyImmediate(Camera.main.gameObject.GetComponent<BetterPerspectiveCamera>());
+			UnityEngine.Object.DestroyImmediate(Camera.main.gameObject.GetComponent<BetterPerspectiveCameraKeys>());
+			UnityEngine.Object.DestroyImmediate(Camera.main.gameObject.GetComponent<BetterPerspectiveCameraMouse>());
 			Camera.main.gameObject.AddComponent<CameraController>();
+			PerspectiveCameraRunning = false;
 		}
+		#endregion
 
-        public string Name { get { return "BetterCameras"; } }
-        public string Description { get { return "Cameras Galore"; } }
-        public string Identifier { get; set; }
     }
 }
