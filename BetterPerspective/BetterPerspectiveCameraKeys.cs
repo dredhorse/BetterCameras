@@ -199,13 +199,7 @@ namespace BetterCameras.BetterPerspective
 
 			//
 
-			if (ResetKey != KeyCode.None)
-			{
-				if (Input.GetKeyDown(ResetKey))
-				{
-					_BPCamera.ResetToInitialValues(IncludePositionOnReset, false);
-				}
-			}
+
 		}
 	}
 }

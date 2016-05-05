@@ -105,9 +105,9 @@ namespace BetterCameras
 		public bool RideCameraEnabled = true;
 		public bool GuestCameraEnabled = true;
 		public bool WalkCameraEnabled = true;
-
-
 		public bool ShowCameraSettings = false;
+
+		public Main BetterCamerasMain;
 
 		private Rect windowRect = new Rect(5, 70, 250, 400);
 		private bool SettingsLoaded = false;
@@ -149,6 +149,13 @@ namespace BetterCameras
 			if (ShowCameraSettings && Input.GetKey(KeyCode.Escape))
 			{
 				ShowCameraSettings = false;
+			}
+			if (KeyboardReset != KeyCode.None)
+			{
+				if (Input.GetKeyDown(KeyboardReset))
+				{
+					BetterCamerasMain.Reset ();
+				}
 			}
 		}
 
@@ -257,7 +264,6 @@ namespace BetterCameras
 			KeyboardWalk = DrawKeyCode (KEYBOARD_SETTING_WALK, KeyboardWalk);
 			KeyboardReset = DrawKeyCode (KEYBOARD_SETTING_RESET, KeyboardReset);
 			KeyboardCameraSettings = DrawKeyCode (KEYBOARD_SETTING_CAMERA_SETTING, KeyboardCameraSettings);
-
 			GUILayout.Label (COMPONENT_SETTINGS);
 			PerspectiveCameraEnabled = DrawBoolField (COMPONENT_SETTING_PERSPECTIVE_CAMERA, PerspectiveCameraEnabled);
 			GuestCameraEnabled = DrawBoolField (COMPONENT_SETTING_GUEST_CAMERA, GuestCameraEnabled);
@@ -298,11 +304,8 @@ namespace BetterCameras
 			CameraKeyRotateSpeed = CameraMouseRotateSpeed - 100f;
 			CameraZoomSpeed = DrawFloatSlider(CAMERA_SETTING_ZOOM_SPEED, CameraZoomSpeed, 1f, 30f);
 			CameraDrawingDistance = DrawFloatSlider(CAMERA_SETTING_DRAWING_DISTANCE,CameraDrawingDistance, 20f, 300f);
-			RenderSettings.fogEndDistance = CameraDrawingDistance;
-			RenderSettings.fogStartDistance = CameraDrawingDistance - 10f;
 			string[] names = QualitySettings.names;
 			GUILayout.FlexibleSpace();
-
 			GUILayout.BeginVertical();
 			GUILayout.Label(CAMERA_SETTING_QUALITY_SETTINGS + ":");
 			int i = 0;
@@ -314,16 +317,13 @@ namespace BetterCameras
 				i++;
 			}
 			GUILayout.EndVertical();
-			QualitySettings.SetQualityLevel(CameraQualitySetting, true);
-
 			GUILayout.FlexibleSpace();
 			if(GUILayout.Button(CAMERA_SETTING_DEFAULT_SETTINGS))
 			{
-				Reset();
-				/** KeysScript.Reset();
-				MouseScript.Reset(); **/
+				BetterCamerasMain.Reset ();
 			}
 			GUILayout.Label(String.Format(CAMERA_SETTING_PUSHKEY, KeyboardCameraSettings));
+			BetterCamerasMain.RefreshSettings ();
 
 		}
 		#endregion

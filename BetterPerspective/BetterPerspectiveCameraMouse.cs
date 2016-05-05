@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace BetterCameras.BetterPerspective
 {
-	class BetterPerspectiveCameraMouse : MonoBehaviour
+	public class BetterPerspectiveCameraMouse : MonoBehaviour
 	{
 		public KeyCode MouseOrbitButton;
 

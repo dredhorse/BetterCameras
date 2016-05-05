@@ -20,6 +20,10 @@ namespace BetterCameras
 		public bool RideCameraRunning = false;
 		public bool WalkCameraRunning = false;
 
+		public BetterPerspectiveCamera PerspectiveCamera;
+		public BetterPerspectiveCameraKeys PerspectiveCameraKeys;
+		public BetterPerspectiveCameraMouse PerspectiveCameraMouse;
+
 		public Main()
 		{
 			BetterCamerasMain = this;
@@ -33,6 +37,7 @@ namespace BetterCameras
 			{
 				Settings = _go.GetComponent<BetterCamerasSettings>();
 			}
+			Settings.BetterCamerasMain = BetterCamerasMain;
 			Settings.onEnable ();
 			if (Settings.PerspectiveCameraEnabled && !PerspectiveCameraRunning)
 			{
@@ -78,6 +83,24 @@ namespace BetterCameras
 
 		}
 
+		public void RefreshSettings()
+		{
+			if (PerspectiveCameraRunning)
+			{
+				PerspectiveCamera.RefreshSettings ();	
+			}
+		}
+
+		public void Reset()
+		{
+			Settings.Reset ();
+			if (PerspectiveCameraRunning)
+			{
+				PerspectiveCamera.ResetToInitialValues(true, false); // need to figure out the difference between the two
+				PerspectiveCamera.Reset ();
+			}
+		}
+
 		#region BetterPerspectiveCamera
 		private void enableBetterPerspectiveCamera()
 		{
@@ -118,7 +141,9 @@ namespace BetterCameras
 			Camera.main.gameObject.AddComponent<BetterPerspectiveCameraMouse>();
 			Camera.main.gameObject.AddComponent<AudioListener>();
 			UnityEngine.Object.Destroy(go);
-
+			PerspectiveCamera = Camera.main.gameObject.GetComponent<BetterPerspectiveCamera>();
+			PerspectiveCameraKeys = Camera.main.gameObject.GetComponent<BetterPerspectiveCameraKeys>();
+			PerspectiveCameraMouse = Camera.main.gameObject.GetComponent<BetterPerspectiveCameraMouse>();
 			PerspectiveCameraRunning = true;
 		}
 
