@@ -5,28 +5,24 @@ namespace BetterCameras.BetterPerspective
 {
 	public class BetterPerspectiveCameraMouse : MonoBehaviour
 	{
-		public KeyCode MouseOrbitButton;
+		public KeyCode MouseOrbitButton = KeyCode.Mouse2;
 
 
-		public bool ScreenEdgeMoveBreaksFollow;
-		public int ScreenEdgeBorderWidth;
+		public bool ScreenEdgeMoveBreaksFollow = true;
+		public int ScreenEdgeBorderWidth = 4;
 		public float MoveSpeed;
 
-		public bool AllowPan;
-		public bool PanBreaksFollow;
-		public float PanSpeedVar;
+		public bool AllowPan = true;
+		public bool PanBreaksFollow = true;
 		public float PanSpeed;
 
-		public bool AllowRotate;
-		public float RotateSpeedVar;
+		public bool AllowRotate = true;
 		public float RotateSpeed;
 
-		public bool AllowTilt;
-		public float TiltSpeedVar;
+		public bool AllowTilt = true;
 		public float TiltSpeed;
 
-		public bool AllowZoom;
-		public float ZoomSpeedVar;
+		public bool AllowZoom = true;
 		public float ZoomSpeed;
 
 		public string RotateInputAxis = "Mouse X";
@@ -34,6 +30,8 @@ namespace BetterCameras.BetterPerspective
 		public string ZoomInputAxis = "Mouse ScrollWheel";
 		public KeyCode PanKey1 = KeyCode.LeftShift;
 		public KeyCode PanKey2 = KeyCode.RightShift;
+
+		public BetterCamerasSettings BCSettings = Main.BCSettings;
 
 		//
 
@@ -43,29 +41,13 @@ namespace BetterCameras.BetterPerspective
 
 		public void Reset()
 		{
-			MouseOrbitButton = KeyCode.Mouse2;   
-
-
 			ScreenEdgeMoveBreaksFollow = true;
 			ScreenEdgeBorderWidth = 4;
-			MoveSpeed = 10f;
-
 			AllowPan = true;
 			PanBreaksFollow = true;
-			PanSpeedVar = 50f;
-			PanKey1 = KeyCode.LeftShift;
-			PanKey2 = KeyCode.RightShift;
-
 			AllowRotate = true;
-			RotateSpeedVar = 360f;
-
 			AllowTilt = true;
-			TiltSpeedVar = 200f;
-
 			AllowZoom = true;
-
-			ZoomSpeedVar = 10f;
-
 			RotateInputAxis = "Mouse X";
 			TiltInputAxis = "Mouse Y";
 			ZoomInputAxis = "Mouse ScrollWheel";
@@ -73,23 +55,36 @@ namespace BetterCameras.BetterPerspective
 
 		protected void Start()
 		{
-
 			_BPCamera = gameObject.GetComponent<BetterPerspectiveCamera>();
+		}
+
+		public void RefreshSettings()
+		{
+			MoveSpeed = BCSettings.CameraMoveSpeed;
+			RotateSpeed = BCSettings.CameraMouseRotateSpeed;
+			ZoomSpeed = BCSettings.CameraZoomSpeed;
+			TiltSpeed = BCSettings.CameraTiltSpeed;
+			PanSpeed= BCSettings.CameraPanSpeed;
+			PanKey1 = BCSettings.KeyboardMouseDrag;
+			PanKey2 = BCSettings.KeyboardMouseDrag;
+			MouseOrbitButton = BCSettings.KeyboardMouseOrbit;   
 		}
 
 		protected void Update()
 		{
 			float num = 0.02f;
-
-			MoveSpeed = 20f;
-			RotateSpeed = RotateSpeedVar;
-			ZoomSpeed = ZoomSpeedVar;
-			TiltSpeed = TiltSpeedVar;
-			PanSpeed= PanSpeedVar;
-
-
+		
 			if (_BPCamera == null)
 				return; 
+
+			MoveSpeed = BCSettings.CameraMoveSpeed;
+			RotateSpeed = BCSettings.CameraMouseRotateSpeed;
+			ZoomSpeed = BCSettings.CameraZoomSpeed;
+			TiltSpeed = BCSettings.CameraTiltSpeed;
+			PanSpeed= BCSettings.CameraPanSpeed;
+			PanKey1 = BCSettings.KeyboardMouseDrag;
+			PanKey2 = BCSettings.KeyboardMouseDrag;
+			MouseOrbitButton = BCSettings.KeyboardMouseOrbit;  
 
 			if (AllowZoom && !UIUtility.isMouseOverUIElement())
 			{

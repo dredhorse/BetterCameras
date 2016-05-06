@@ -15,7 +15,7 @@ namespace BetterCameras
 
 		public GameObject _go;
 
-		public static BetterCamerasSettings Settings = null;
+		public static BetterCamerasSettings BCSettings = null;
 		public bool PerspectiveCameraRunning = false;
 		public bool GuestCameraRunning = false;
 		public bool RideCameraRunning = false;
@@ -39,17 +39,17 @@ namespace BetterCameras
 		{
 			_go = new GameObject ();
 			_go.AddComponent<BetterCamerasSettings> ();
-			if (Settings == null)
+			if (BCSettings == null)
 			{
-				Settings = _go.GetComponent<BetterCamerasSettings>();
+				BCSettings = _go.GetComponent<BetterCamerasSettings>();
 			}
-			Settings.BetterCamerasMain = BetterCamerasMain;
-			Settings.onEnable ();
-			if (Settings.PerspectiveCameraEnabled && !PerspectiveCameraRunning)
+			BCSettings.BetterCamerasMain = BetterCamerasMain;
+			BCSettings.onEnable ();
+			if (BCSettings.PerspectiveCameraEnabled && !PerspectiveCameraRunning)
 			{
 				enableBetterPerspectiveCamera();
 			}
-			if (Settings.RideCameraEnabled && !RideCameraRunning)
+			if (BCSettings.RideCameraEnabled && !RideCameraRunning)
 			{
 				enableBetterRideCamera ();
 			}	
@@ -58,7 +58,7 @@ namespace BetterCameras
 
 		public void onDisabled()
 		{
-			Settings.Save();
+			BCSettings.Save();
 			if (PerspectiveCameraRunning)
 			{
 				disableBetterPerspectiveCamera();
@@ -73,31 +73,31 @@ namespace BetterCameras
 
 		public void onDrawSettingsUI()
 		{
-			Settings.onDrawSettingsUI ();
+			BCSettings.onDrawSettingsUI ();
 
 		}
 
 		public void onSettingsOpened()
 		{
-			Settings.onSettingsOpened ();
+			BCSettings.onSettingsOpened ();
 		}
 
 		public void onSettingsClosed()
 		{
-			Settings.onSettingsClosed ();
-			if (Settings.PerspectiveCameraEnabled && !PerspectiveCameraRunning)
+			BCSettings.onSettingsClosed ();
+			if (BCSettings.PerspectiveCameraEnabled && !PerspectiveCameraRunning)
 			{
 				enableBetterPerspectiveCamera ();
 			}
-			if (!Settings.PerspectiveCameraEnabled && PerspectiveCameraRunning)
+			if (!BCSettings.PerspectiveCameraEnabled && PerspectiveCameraRunning)
 			{
 				disableBetterPerspectiveCamera ();
 			}
-			if (Settings.RideCameraEnabled && !RideCameraRunning)
+			if (BCSettings.RideCameraEnabled && !RideCameraRunning)
 			{
 				enableBetterRideCamera ();
 			}
-			if (!Settings.RideCameraEnabled && RideCameraRunning)
+			if (!BCSettings.RideCameraEnabled && RideCameraRunning)
 			{
 				disableBetterRideCamera ();
 			}
@@ -109,21 +109,24 @@ namespace BetterCameras
 			if (PerspectiveCameraRunning)
 			{
 				PerspectiveCamera.RefreshSettings ();	
+				PerspectiveCameraMouse.RefreshSettings ();
+				PerspectiveCameraKeys.RefreshSettings ();
 			}
 			if (RideCameraRunning)
 			{
-				RideMouse._sensitivityX = Settings.CameraMouseRotateSpeed;
-				RideMouse._sensitivityY = Settings.CameraMouseRotateSpeed;
+				RideMouse._sensitivityX = BCSettings.CameraMouseRotateSpeed;
+				RideMouse._sensitivityY = BCSettings.CameraMouseRotateSpeed;
 			}
 		}
 
 		public void Reset()
 		{
-			Settings.Reset ();
+			BCSettings.Reset ();
 			if (PerspectiveCameraRunning)
 			{
 				PerspectiveCamera.ResetToInitialValues(true, false); // need to figure out the difference between the two
 				PerspectiveCamera.Reset ();
+				PerspectiveCameraMouse.Reset ();
 			}
 
 		}
@@ -135,9 +138,9 @@ namespace BetterCameras
 			RideCameraGameObject.AddComponent<BetterRideCamera> ();
 			RideCamera = RideCameraGameObject.GetComponent<BetterRideCamera> ();
 			RideMouse = RideCameraGameObject.GetComponent<BetterRideMouse> ();
-			RideCamera.RideKey = Settings.KeyboardRide;
-			RideMouse._sensitivityX = Settings.CameraMouseRotateSpeed;
-			RideMouse._sensitivityY = Settings.CameraMouseRotateSpeed;
+			RideCamera.RideKey = BCSettings.KeyboardRide;
+			RideMouse._sensitivityX = BCSettings.CameraMouseRotateSpeed;
+			RideMouse._sensitivityY = BCSettings.CameraMouseRotateSpeed;
 			RideCameraRunning = true;
 		}
 
@@ -191,6 +194,8 @@ namespace BetterCameras
 			PerspectiveCamera = Camera.main.gameObject.GetComponent<BetterPerspectiveCamera>();
 			PerspectiveCameraKeys = Camera.main.gameObject.GetComponent<BetterPerspectiveCameraKeys>();
 			PerspectiveCameraMouse = Camera.main.gameObject.GetComponent<BetterPerspectiveCameraMouse>();
+			PerspectiveCamera.RefreshSettings ();	
+			PerspectiveCameraMouse.RefreshSettings ();
 			PerspectiveCameraRunning = true;
 		}
 

@@ -5,23 +5,23 @@ namespace BetterCameras.BetterPerspective
 {
 	public class BetterPerspectiveCameraKeys : MonoBehaviour
 	{
-		public bool AllowMove;
+		public bool AllowMove = true;
 		public float MoveSpeed;
 		public float MoveSpeedVar;
-		public bool AllowFastMove;
+		public bool AllowFastMove = true;
 		public float FastMoveSpeed;
 		public KeyCode FastMoveKeyCode1;
 		public KeyCode FastMoveKeyCode2;
 
-		public bool AllowRotate;
+		public bool AllowRotate = true;
 		public float RotateSpeed;
 		public float RotateSpeedVar;
 
-		public bool AllowZoom;
+		public bool AllowZoom = true;
 		public float ZoomSpeed;
 		public float ZoomSpeedVar;
 
-		public bool AllowTilt;
+		public bool AllowTilt = true;
 		public float TiltSpeed;
 
 		public KeyCode ResetKey;
@@ -34,69 +34,74 @@ namespace BetterCameras.BetterPerspective
 
 		public bool RotateUsesInputAxis = false;
 		public string RotateInputAxis = "KbCameraRotate";
-		public KeyCode RotateLeftKey = KeyCode.Q;
-		public KeyCode RotateRightKey = KeyCode.E;
+		public KeyCode RotateLeftKey;
+		public KeyCode RotateRightKey;
 
 		public bool ZoomUsesInputAxis = false;
 		public string ZoomInputAxis = "KbCameraZoom";
-		public KeyCode ZoomOutKey = KeyCode.Z;
-		public KeyCode ZoomInKey = KeyCode.X;
+		public KeyCode ZoomOutKey;
+		public KeyCode ZoomInKey;
 
 		public bool TiltUsesInputAxis = false;
 		public string TiltInputAxis = "KbCameraTilt";
-		public KeyCode TiltUpKey = KeyCode.R;
-		public KeyCode TiltDownKey = KeyCode.F;
+		public KeyCode TiltUpKey;
+		public KeyCode TiltDownKey;
 
 		//
 
 		private BetterPerspectiveCamera _BPCamera;
+		public BetterCamerasSettings BCSettings;
 
 		//
 
 		public void Reset()
 		{
 			AllowMove = true;
-			MoveSpeedVar = 15f;
-			MoveSpeed = MoveSpeedVar;
-
 			AllowFastMove = true;
-			FastMoveSpeed = 40f;
-			FastMoveKeyCode1 = KeyCode.LeftShift;
-			FastMoveKeyCode2 = KeyCode.RightShift;
-
 			AllowRotate = true;
-			RotateSpeedVar = 180f;
-
 			AllowZoom = true;
-			ZoomSpeedVar = 15f;
-
 			AllowTilt = true;
-			TiltSpeed = 90f;
-
-			ResetKey = KeyCode.Home;
 			IncludePositionOnReset = true;
-
 			MovementBreaksFollow = true;
+			RefreshSettings ();
+		}
+
+		public void Awake()
+		{
+			Start ();
+		}
+
+		public void RefreshSettings()
+		{
+			MoveSpeed = BCSettings.CameraMoveSpeed;
+			FastMoveSpeed = BCSettings.CameraFastMoveSpeed;
+			RotateSpeed = BCSettings.CameraKeyRotateSpeed;
+			ZoomSpeed = BCSettings.CameraZoomSpeed;
+			TiltSpeed = BCSettings.CameraTiltSpeed;
+			FastMoveKeyCode1 = BCSettings.KeyboardFastMove;
+			FastMoveKeyCode2 = BCSettings.KeyboardFastMove;
+			ResetKey = BCSettings.KeyboardReset;
+			RotateLeftKey = BCSettings.KeyboardRotateLeft;
+			RotateRightKey = BCSettings.KeyboardRotateRight;
+			ZoomOutKey = BCSettings.KeyboardZoomOut;
+			ZoomInKey = BCSettings.KeyboardZoomIn;
+			TiltUpKey = BCSettings.KeyboardTiltUp;
+			TiltDownKey = BCSettings.KeyboardTiltDown;
 		}
 
 		protected void Start()
 		{
-
 			_BPCamera = gameObject.GetComponent<BetterPerspectiveCamera>();
+			BCSettings = Main.BCSettings;
+			RefreshSettings ();
 		}
 
 		protected void Update()
 		{
 			float num = 0.02f;
 
-			FastMoveSpeed = MoveSpeedVar * 2;
-			MoveSpeed = MoveSpeedVar;
-			RotateSpeed = RotateSpeedVar;
-			ZoomSpeed = ZoomSpeedVar;
-			TiltSpeed = 90f;
-
 			if (_BPCamera == null)
-				return; // no camera, bail!
+				return;
 
 			if (AllowMove && (!_BPCamera.IsFollowing || MovementBreaksFollow))
 			{
@@ -196,10 +201,6 @@ namespace BetterCameras.BetterPerspective
 					}
 				}
 			}
-
-			//
-
-
 		}
 	}
 }

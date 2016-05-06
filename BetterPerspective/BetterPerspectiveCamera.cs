@@ -67,7 +67,7 @@ namespace BetterCameras.BetterPerspective
 		private bool _lastDebugCamera;
 		private BetterPerspectiveCameraKeys KeysScript;
 		private BetterPerspectiveCameraMouse MouseScript;
-		public BetterCamerasSettings CameraSettings = Main.Settings;
+		public BetterCamerasSettings BCSettings = Main.BCSettings;
 		public Camera camera;
 
 		public void Reset()
@@ -127,16 +127,16 @@ namespace BetterCameras.BetterPerspective
 
 		public void RefreshSettings()
 		{
-			TiltDampening = CameraSettings.CameraSmoothness;
-			RotationDampening = CameraSettings.CameraSmoothness;
-			ZoomDampening = CameraSettings.CameraSmoothness;
-			Smoothing = CameraSettings.CameraSmoothing;
-			Smoothness = CameraSettings.CameraSmoothness;
-			MoveDampening = CameraSettings.CameraSmoothness;
-			QualitySettings.SetQualityLevel(CameraSettings.CameraQualitySetting, true);
-			camera.farClipPlane = CameraSettings.CameraDrawingDistance;
-			RenderSettings.fogEndDistance = CameraSettings.CameraDrawingDistance;
-			RenderSettings.fogStartDistance = CameraSettings.CameraDrawingDistance - 10f;
+			TiltDampening = BCSettings.CameraSmoothness;
+			RotationDampening = BCSettings.CameraSmoothness;
+			ZoomDampening = BCSettings.CameraSmoothness;
+			Smoothing = BCSettings.CameraSmoothing;
+			Smoothness = BCSettings.CameraSmoothness;
+			MoveDampening = BCSettings.CameraSmoothness;
+			QualitySettings.SetQualityLevel(BCSettings.CameraQualitySetting, true);
+			camera.farClipPlane = BCSettings.CameraDrawingDistance;
+			RenderSettings.fogEndDistance = BCSettings.CameraDrawingDistance;
+			RenderSettings.fogStartDistance = BCSettings.CameraDrawingDistance - 10f;
 		}
 
 		protected void Update()
@@ -144,7 +144,7 @@ namespace BetterCameras.BetterPerspective
 
 
 
-			if (Input.GetMouseButton(2) || Input.GetKey(CameraSettings.KeyboardMouseDrag))
+			if (Input.GetKey(BCSettings.KeyboardMouseOrbit) || Input.GetKey(BCSettings.KeyboardMouseDrag))
 			{
 				Cursor.visible = false;
 				Cursor.lockState = CursorLockMode.Locked;
@@ -157,10 +157,10 @@ namespace BetterCameras.BetterPerspective
 			}
 
 
-			MoveDampening = CameraSettings.CameraSmoothness;
-			ZoomDampening = CameraSettings.CameraSmoothness;
-			RotationDampening = CameraSettings.CameraSmoothness;
-			TiltDampening = CameraSettings.CameraSmoothness;
+			MoveDampening = BCSettings.CameraSmoothness;
+			ZoomDampening = BCSettings.CameraSmoothness;
+			RotationDampening = BCSettings.CameraSmoothness;
+			TiltDampening = BCSettings.CameraSmoothness;
 
 			if (lockedOnto != null)
 			{
