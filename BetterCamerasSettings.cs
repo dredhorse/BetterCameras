@@ -28,7 +28,7 @@ namespace BetterCameras
 		public const string KEYBOARD_SETTING_TILT_UP = "Tilt Up Key" ;
 		public const string KEYBOARD_SETTING_TILT_DOWN = "Tilt Down Key" ;
 		public const string KEYBOARD_SETTING_FASTMOVE = "Fast Move Key" ;
-		private const string KEYBOARD_SETTING_MOUSE_DRAG = "Mouse Drag Key" ;
+		public const string KEYBOARD_SETTING_MOUSE_DRAG = "Mouse Drag Key" ;
 		public const string KEYBOARD_SETTING_RIDE = "Enter / Leave Ride Key" ;
 		public const string KEYBOARD_SETTING_GUEST = "Follow Guest Key" ;
 		public const string KEYBOARD_SETTING_WALK = "Walk Key" ;
@@ -62,13 +62,14 @@ namespace BetterCameras
 		const string kbGuest = "KbGuest";
 		const string kbWalk = "KbWalk";
 		const string kbReset = "KbReset";
+		const string kbFastMove = "KbFastMove";
 		const string kbCameraSettings = "KbCameraSettings";
 		const string perspectiveCameraEnabled = "PerspectiveCameraEnabled";
 		const string rideCameraEnabled = "RideCameraEnabled";
 		const string walkCameraEnabled = "WalkCameraEnabled";
 		const string guestCameraEnabled = "GuestCameraEnabled";
 		const string betterCamerasSettings = "BetterCamerasSettings";
-		const string kbFastMove = "KbFastMove";
+
 
 		public bool CameraSmoothing;
 		public float CameraSmoothness;
@@ -94,12 +95,6 @@ namespace BetterCameras
 		public KeyCode KeyboardWalk = KeyCode.Tab;
 		public KeyCode KeyboardReset = KeyCode.Home;
 		public KeyCode KeyboardCameraSettings = KeyCode.P;
-
-		public string HorizontalInputAxis = "Horizontal";
-		public string VerticalInputAxis = "Vertical";
-		public string RotateInputAxis = "KbCameraRotate";
-		public string ZoomInputAxis = "KbCameraZoom";
-		public string TiltInputAxis = "KbCameraTilt";
 
 		public bool PerspectiveCameraEnabled = true;
 		public bool RideCameraEnabled = true;
