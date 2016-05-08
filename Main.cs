@@ -61,7 +61,6 @@ namespace BetterCameras
 			{
 				enableBetterGuestCamera ();
 			}
-
 		}
 
 		public void onDisabled()
@@ -236,8 +235,6 @@ namespace BetterCameras
 			PerspectiveCameraMouse = Camera.main.gameObject.AddComponent<BetterPerspectiveCameraMouse>();
 			Camera.main.gameObject.AddComponent<AudioListener>();
 			UnityEngine.Object.Destroy(go);
-			PerspectiveCamera.RefreshSettings ();	
-			PerspectiveCameraMouse.RefreshSettings ();
 			PerspectiveCameraRunning = true;
 		}
 

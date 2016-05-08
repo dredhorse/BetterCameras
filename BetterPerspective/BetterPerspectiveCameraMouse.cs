@@ -56,6 +56,7 @@ namespace BetterCameras.BetterPerspective
 		protected void Start()
 		{
 			_BPCamera = gameObject.GetComponent<BetterPerspectiveCamera>();
+			RefreshSettings ();
 		}
 
 		public void RefreshSettings()
