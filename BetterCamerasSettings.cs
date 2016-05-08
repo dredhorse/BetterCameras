@@ -16,6 +16,8 @@ namespace BetterCameras
 		public const string CAMERA_SETTING_ZOOM_SPEED = "Zoom Speed";
 		public const string CAMERA_SETTING_TILT_SPEED = "Tilt Speed" ;
 		public const string CAMERA_SETTING_PAN_SPEED = "Pan Speed" ;
+		public const string CAMERA_SETTING_GUEST_DISTANCE = "Guest Camera Distance" ;
+		public const string CAMERA_SETTING_GUEST_HEIGHT = "Guest Camera Height";
 		public const string CAMERA_SETTING_DRAWING_DISTANCE = "Drawing Distance" ;
 		public const string CAMERA_SETTING_QUALITY_SETTINGS = "Quality Settings" ;
 		public const string CAMERA_SETTING_DEFAULT_SETTINGS = "Default Settings" ;
@@ -52,6 +54,8 @@ namespace BetterCameras
 		const string cameraZoomSpeed = "CameraZoomSpeed";
 		const string cameraTiltSpeed = "CameraTiltSpeed";
 		const string cameraPanSpeed = "CameraPanSpeed";
+		const string cameraGuestDistance = "CameraGuestDistance";
+		const string cameraGuestHeight = "CameraGuestHeight";
 		const string cameraDrawingDistance = "CameraDrawingDistance";
 		const string cameraQualitySetting = "CameraQualitySetting";
 		const string kbRotateLeft = "KbRotateLeft";
@@ -84,6 +88,8 @@ namespace BetterCameras
 		public float CameraFastMoveSpeed;
 		public float CameraTiltSpeed;
 		public float CameraPanSpeed;
+		public float CameraGuestDistance;
+		public float CameraGuestHeight;
 		public float CameraDrawingDistance;
 		public int CameraQualitySetting;
 
@@ -174,6 +180,8 @@ namespace BetterCameras
 			CameraFastMoveSpeed = 40F;
 			CameraTiltSpeed = 90F;
 			CameraPanSpeed = 50F;
+			CameraGuestDistance = -0.13f;
+			CameraGuestHeight = -0.09f;
 			CameraDrawingDistance = 10F;
 		}
 
@@ -190,6 +198,8 @@ namespace BetterCameras
 			CameraTiltSpeed = PlayerPrefs.GetFloat (cameraTiltSpeed);
 			CameraPanSpeed = PlayerPrefs.GetFloat (cameraPanSpeed);
 			CameraDrawingDistance = PlayerPrefs.GetFloat (cameraDrawingDistance);
+			CameraGuestHeight = PlayerPrefs.GetFloat (cameraGuestHeight);
+			CameraGuestDistance = PlayerPrefs.GetFloat (cameraGuestDistance);
 			CameraQualitySetting = PlayerPrefs.GetInt (cameraQualitySetting);
 
 			KeyboardRotateLeft = GetKeyCodeFromString (PlayerPrefs.GetString (kbRotateLeft));
@@ -228,6 +238,8 @@ namespace BetterCameras
 			PlayerPrefs.SetFloat (cameraTiltSpeed, CameraTiltSpeed);
 			PlayerPrefs.SetFloat (cameraPanSpeed, CameraPanSpeed);
 			PlayerPrefs.SetFloat (cameraDrawingDistance, CameraDrawingDistance);
+			PlayerPrefs.SetFloat (cameraGuestDistance, CameraGuestDistance);
+			PlayerPrefs.SetFloat (cameraGuestHeight, CameraGuestHeight);
 			PlayerPrefs.SetInt (cameraQualitySetting, CameraQualitySetting);
 
 			PlayerPrefs.SetString (kbRotateLeft, KeyboardRotateLeft.ToString());
@@ -316,6 +328,9 @@ namespace BetterCameras
 			CameraTiltSpeed = DrawFloatSlider(CAMERA_SETTING_TILT_SPEED, CameraTiltSpeed, 30.0F, 80.0f);
 			CameraPanSpeed = DrawFloatSlider (CAMERA_SETTING_PAN_SPEED, CameraPanSpeed, 10.0F, 60.0F);
 			CameraDrawingDistance = DrawFloatSlider(CAMERA_SETTING_DRAWING_DISTANCE,CameraDrawingDistance, 20f, 300f);
+			CameraGuestDistance = DrawFloatSlider (CAMERA_SETTING_GUEST_DISTANCE, CameraGuestDistance, -0.5f, 2.5f);
+			CameraGuestHeight = DrawFloatSlider (CAMERA_SETTING_GUEST_HEIGHT, CameraGuestHeight, -0.5f, 0.5f);
+
 			string[] names = QualitySettings.names;
 			GUILayout.FlexibleSpace();
 			GUILayout.BeginVertical();

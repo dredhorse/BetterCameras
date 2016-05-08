@@ -2,6 +2,8 @@
 using BetterCameras.BetterPerspective;
 using System;
 using BetterCameras.BetterRide;
+using BetterCameras.BetterGuest;
+using UnityEngine.Events;
 
 namespace BetterCameras
 {
@@ -29,6 +31,8 @@ namespace BetterCameras
 
 
 		private GameObject RideCameraGameObject;
+		private GameObject GuestCameraGameObject;
+		private BetterGuestCamera GuestCamera;
 
 		public Main()
 		{
@@ -53,6 +57,10 @@ namespace BetterCameras
 			{
 				enableBetterRideCamera ();
 			}	
+			if (BCSettings.GuestCameraEnabled && !GuestCameraRunning)
+			{
+				enableBetterGuestCamera ();
+			}
 
 		}
 
@@ -66,6 +74,10 @@ namespace BetterCameras
 			if (RideCameraRunning)
 			{
 				disableBetterRideCamera ();
+			}
+			if (GuestCameraRunning)
+			{
+				disableBetterGuestCamera ();
 			}
 			UnityEngine.Object.Destroy (_go);
 		}
@@ -101,7 +113,14 @@ namespace BetterCameras
 			{
 				disableBetterRideCamera ();
 			}
-
+			if (BCSettings.GuestCameraEnabled && !GuestCameraRunning)
+			{
+				enableBetterGuestCamera ();
+			}
+			if (!BCSettings.GuestCameraEnabled && GuestCameraRunning)
+			{
+				disableBetterGuestCamera ();
+			}
 		}
 
 		public void RefreshSettings()
@@ -117,6 +136,10 @@ namespace BetterCameras
 				RideMouse._sensitivityX = BCSettings.CameraMouseRotateSpeed;
 				RideMouse._sensitivityY = BCSettings.CameraMouseRotateSpeed;
 			}
+			if (GuestCameraRunning)
+			{
+				GuestCamera.RefreshSettings ();
+			}
 		}
 
 		public void Reset()
@@ -128,15 +151,37 @@ namespace BetterCameras
 				PerspectiveCamera.Reset ();
 				PerspectiveCameraMouse.Reset ();
 			}
+			if (GuestCameraRunning)
+			{
+				GuestCamera.ApplySettings ();
+			}
 
 		}
+
+		#region Better Guest Camera
+		public void enableBetterGuestCamera()
+		{
+			GuestCameraGameObject = new GameObject ();
+			GuestCamera = GuestCameraGameObject.AddComponent<BetterGuestCamera> ();
+			Debug.Log ("Guest Camera Enabled");
+			Debug.Log (GuestCamera);
+			GuestCamera.GuestEnter = BCSettings.KeyboardGuest;
+			GuestCameraRunning = true;
+		}
+
+		public void disableBetterGuestCamera()
+		{
+			UnityEngine.Object.DestroyImmediate (GuestCameraGameObject);
+			GuestCameraRunning = false;
+		}
+
+		#endregion
 
 		#region Better Ride Camera
 		public void enableBetterRideCamera()
 		{
 			RideCameraGameObject = new GameObject ();
-			RideCameraGameObject.AddComponent<BetterRideCamera> ();
-			RideCamera = RideCameraGameObject.GetComponent<BetterRideCamera> ();
+			RideCamera = RideCameraGameObject.AddComponent<BetterRideCamera> ();
 			RideMouse = RideCameraGameObject.GetComponent<BetterRideMouse> ();
 			RideCamera.RideKey = BCSettings.KeyboardRide;
 			RideMouse._sensitivityX = BCSettings.CameraMouseRotateSpeed;
@@ -186,14 +231,11 @@ namespace BetterCameras
 
 			UnityEngine.Object.DestroyImmediate(cam.gameObject.GetComponent<CameraController>());
 
-			Camera.main.gameObject.AddComponent<BetterPerspectiveCamera>();
-			Camera.main.gameObject.AddComponent<BetterPerspectiveCameraKeys>();
-			Camera.main.gameObject.AddComponent<BetterPerspectiveCameraMouse>();
+			PerspectiveCamera = Camera.main.gameObject.AddComponent<BetterPerspectiveCamera>();
+			PerspectiveCameraKeys =Camera.main.gameObject.AddComponent<BetterPerspectiveCameraKeys>();
+			PerspectiveCameraMouse = Camera.main.gameObject.AddComponent<BetterPerspectiveCameraMouse>();
 			Camera.main.gameObject.AddComponent<AudioListener>();
 			UnityEngine.Object.Destroy(go);
-			PerspectiveCamera = Camera.main.gameObject.GetComponent<BetterPerspectiveCamera>();
-			PerspectiveCameraKeys = Camera.main.gameObject.GetComponent<BetterPerspectiveCameraKeys>();
-			PerspectiveCameraMouse = Camera.main.gameObject.GetComponent<BetterPerspectiveCameraMouse>();
 			PerspectiveCamera.RefreshSettings ();	
 			PerspectiveCameraMouse.RefreshSettings ();
 			PerspectiveCameraRunning = true;

@@ -80,6 +80,7 @@ PeepCam
     <Compile Include="BetterPerspective\BetterPerspectiveCameraMouse.cs" />
     <Compile Include="BetterRide\BetterRideCamera.cs" />
     <Compile Include="BetterRide\BetterRideMouse.cs" />
+    <Compile Include="BetterGuest\BetterGuestCamera.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSHARP.Targets" />
   <ProjectExtensions>
