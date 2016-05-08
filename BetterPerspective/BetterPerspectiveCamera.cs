@@ -122,10 +122,11 @@ namespace BetterCameras.BetterPerspective
 			_currRotation = Rotation;
 			_currTilt = Tilt;
 
+			RefreshSettings ();
 
 			CreateTarget();
 
-			RefreshSettings ();
+
 			Debug.Log ("Perspective Camera Started");
 		}
 
@@ -161,9 +162,7 @@ namespace BetterCameras.BetterPerspective
 			{
 				Follow(lockedOnto, false);
 			}
-
-
-
+				
 			if (_lastDebugCamera != ShowDebugCameraTarget)
 			{
 				if (_targetRenderer != null)
@@ -172,6 +171,7 @@ namespace BetterCameras.BetterPerspective
 					_lastDebugCamera = ShowDebugCameraTarget;
 				}
 			}
+
 		}
 
 		protected void LateUpdate()
@@ -221,14 +221,9 @@ namespace BetterCameras.BetterPerspective
 			{
 				EnsureTargetIsVisible();
 			}
-
-
 			UpdateCamera();
 		}
-
-
-
-
+			
 		public Transform CameraTarget
 		{
 			get { return targetTransform; }
@@ -314,25 +309,26 @@ namespace BetterCameras.BetterPerspective
 				{
 					OnBeginFollow(_followTarget);
 				}
-			}
+			} 
 		}
 
-
-		void OnDisable()
+		public void EndFollow (Transform followTarget, bool snap)
 		{
+			base.lockOnto (null);
+			Follow (followTarget, snap); 
 		}
 
 		public void Follow(GameObject followTarget, bool snap)
 		{
-			Follow (followTarget.transform, snap);
+			EndFollow (followTarget.transform, snap);
 		}
 
 
 		public void EndFollow()
 		{
-			Follow((Transform)null, false);
+			EndFollow((Transform)null, false);
 		}
-
+			
 
 		public void AddToPosition(float dx, float dy, float dz)
 		{

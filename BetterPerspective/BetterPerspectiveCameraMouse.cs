@@ -89,7 +89,6 @@ namespace BetterCameras.BetterPerspective
 
 			if (AllowZoom && !UIUtility.isMouseOverUIElement())
 			{
-
 				var scroll = -Input.GetAxisRaw(ZoomInputAxis);
 				_BPCamera.Distance -= scroll * ZoomSpeed * num;
 			}
@@ -111,8 +110,6 @@ namespace BetterCameras.BetterPerspective
 				}
 				else
 				{
-
-
 					if (AllowTilt)
 					{
 						var tilt = Input.GetAxisRaw(TiltInputAxis);
