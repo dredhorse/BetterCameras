@@ -63,6 +63,7 @@ namespace BetterCameras.BetterPerspective
 		private MeshRenderer _targetRenderer;
 
 		private Transform _followTarget;
+		private Transform _targetTransform;
 
 		private bool _lastDebugCamera;
 		private BetterPerspectiveCameraKeys KeysScript;
@@ -204,14 +205,14 @@ namespace BetterCameras.BetterPerspective
 				_currRotation = Mathf.LerpAngle(_currRotation, Rotation, num * RotationDampening);
 				_currDistance = Mathf.Lerp(_currDistance, Distance, num * ZoomDampening);
 				_currTilt = Mathf.LerpAngle(_currTilt, Tilt, num * TiltDampening);
-				_target.transform.position = Vector3.Lerp(_target.transform.position, LookAt, num * MoveDampening);
+				_targetTransform.position = Vector3.Lerp(_targetTransform.position, LookAt, num * MoveDampening);
 			}
 			else
 			{
 				_currRotation = Rotation;
 				_currDistance = Distance;
 				_currTilt = Tilt;
-				_target.transform.position = LookAt;
+				_targetTransform.position = LookAt;
 			}
 
 			_moveVector = Vector3.zero;
@@ -236,7 +237,7 @@ namespace BetterCameras.BetterPerspective
 
 		public Transform CameraTarget
 		{
-			get { return _target.transform; }
+			get { return _targetTransform; }
 		}
 
 
@@ -266,7 +267,7 @@ namespace BetterCameras.BetterPerspective
 				_currDistance = Distance;
 				_currRotation = Rotation;
 				_currTilt = Tilt;
-				_target.transform.position = LookAt;
+				_targetTransform.position = LookAt;
 			}
 		}
 
@@ -279,7 +280,7 @@ namespace BetterCameras.BetterPerspective
 
 			if (snap)
 			{
-				_target.transform.position = toPosition;
+				_targetTransform.position = toPosition;
 			}
 		}
 
@@ -369,7 +370,7 @@ namespace BetterCameras.BetterPerspective
 		{
 			var rotation = Quaternion.Euler(_currTilt, _currRotation, 0);
 			var v = new Vector3(0.0f, 0.0f, -_currDistance);
-			var position = rotation * v + _target.transform.position;
+			var position = rotation * v + _targetTransform.position;
 
 			if (camera.orthographic)
 			{
@@ -384,7 +385,8 @@ namespace BetterCameras.BetterPerspective
 		private void CreateTarget()
 		{
 			_target = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-			_target.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+			_targetTransform = _target.transform;
+			_targetTransform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
 
 			_target.GetComponent<Renderer>().material.color = Color.green;
 
@@ -398,7 +400,7 @@ namespace BetterCameras.BetterPerspective
 			_targetRenderer.enabled = false;
 
 			_target.name = "CameraTarget";
-			_target.transform.position = LookAt;
+			_targetTransform.position = LookAt;
 		}
 
 		private bool DistanceToTargetIsLessThan(float sqrDistance)
@@ -406,7 +408,7 @@ namespace BetterCameras.BetterPerspective
 			if (!IsFollowing)
 				return true;
 
-			var p1 = _target.transform.position;
+			var p1 = _targetTransform.position;
 			var p2 = _followTarget.position;
 			p1.y = p2.y = 0;
 			var v = p1 - p2;
@@ -417,7 +419,7 @@ namespace BetterCameras.BetterPerspective
 
 		private void EnsureTargetIsVisible()
 		{
-			var direction = (transform.position - _target.transform.position);
+			var direction = (transform.position - _targetTransform.position);
 			direction.Normalize();
 
 			var distance = Distance;
@@ -425,7 +427,7 @@ namespace BetterCameras.BetterPerspective
 			RaycastHit hitInfo;
 
 
-			if (Physics.SphereCast(_target.transform.position, CameraRadius, direction, out hitInfo, distance, ~TargetVisibilityIgnoreLayerMask))
+			if (Physics.SphereCast(_targetTransform.position, CameraRadius, direction, out hitInfo, distance, ~TargetVisibilityIgnoreLayerMask))
 			{
 				if (hitInfo.transform != _target)
 				{
